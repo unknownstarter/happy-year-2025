@@ -42,7 +42,7 @@ openai_service = None  # 전역 변수 선언
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://happy-year-2025-9mq5-bd6jlf3lf-noahs-projects-9b976b5c.vercel.app",
+        "https://happy-year-2025-9mq5-6xe9wx2mk-noahs-projects-9b976b5c.vercel.app",
         "http://localhost:3000",
         "http://localhost:51171",
     ],
@@ -102,7 +102,7 @@ async def options_fortune():
     return JSONResponse(
         content={"message": "OK"},
         headers={
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": "https://happy-year-2025-9mq5-6xe9wx2mk-noahs-projects-9b976b5c.vercel.app",
             "Access-Control-Allow-Methods": "POST, OPTIONS",
             "Access-Control-Allow-Headers": "Content-Type, Accept",
         },
