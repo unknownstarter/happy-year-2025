@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = String.fromEnvironment('API_URL',
-      defaultValue: 'https://happy-year-2025-production.up.railway.app');
+  static const String baseUrl =
+      String.fromEnvironment('API_URL', defaultValue: 'http://localhost:8000');
 
   static Future<Map<String, String>> getFortune({
     required String name,
@@ -25,8 +25,8 @@ class ApiService {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Origin':
-              'https://happy-year-2025-9mq5-2ku69kyls-noahs-projects-9b976b5c.vercel.app'
+          'Access-Control-Request-Method': 'POST',
+          'Access-Control-Request-Headers': 'content-type,accept'
         },
         body: jsonEncode({
           'name': name,
@@ -55,7 +55,7 @@ class ApiService {
     } catch (e, stackTrace) {
       print('Network error: $e');
       print('Stack trace: $stackTrace');
-      return {'오류': '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요. ($e)'};
+      return {'오류': '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.'};
     }
   }
 }
