@@ -29,27 +29,34 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
+  <!-- Firebase SDK 업데이트 -->
+  <script type="module">
+    // Firebase SDK 임포트
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+    import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js';
+
+    // Firebase 설정
+    const firebaseConfig = {
+      apiKey: "AIzaSyDFWxZVq1sBHWVFbVZ9Wd_Hs_Wd_Hs_Wd",
+      authDomain: "happy-year-2025.firebaseapp.com",
+      projectId: "happy-year-2025",
+      storageBucket: "happy-year-2025.appspot.com",
+      messagingSenderId: "123456789012",
+      appId: "1:123456789012:web:abcdef1234567890",
+      measurementId: "G-ABCDEF1234"
+    };
+
+    // Firebase 초기화
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    // 전역 객체로 노출
+    window.firebaseApp = app;
+    window.firebaseAnalytics = analytics;
+  </script>
+
   <title>happy_year_2025</title>
   <link rel="manifest" href="manifest.json">
-
-  <!-- Firebase 설정 추가 -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID",
-      measurementId: "YOUR_MEASUREMENT_ID"
-    };
-    
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
-  </script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
