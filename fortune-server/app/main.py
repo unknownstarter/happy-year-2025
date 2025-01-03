@@ -17,9 +17,11 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "https://happy-year-2025.vercel.app",  # 실제 배포된 도메인
-        "https://happy-year-2025-git-main-your-github-username.vercel.app",
-        "https://happy-year-2025-*-your-github-username.vercel.app",
+        "http://localhost:8000",
+        "https://happy-year-2025.vercel.app",
+        "https://happy-year-2025-git-*.vercel.app",
+        "https://happy-year-2025-*.vercel.app",
+        "https://happy-year-2025-9mq5-hzflfyfuo-noahs-projects-9b976b5c.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
