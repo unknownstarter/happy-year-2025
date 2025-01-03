@@ -23,8 +23,10 @@ class ApiService {
       final response = await http.post(
         Uri.parse('${apiUrl}api/fortune'),
         headers: {
-          'Content-Type': 'application/json; charset=utf-8',
+          'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'Origin':
+              'https://happy-year-2025-9mq5-2ku69kyls-noahs-projects-9b976b5c.vercel.app'
         },
         body: jsonEncode({
           'name': name,
