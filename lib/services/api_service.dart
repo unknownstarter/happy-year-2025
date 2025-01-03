@@ -12,10 +12,12 @@ class ApiService {
     required DateTime birthDateTime,
   }) async {
     try {
-      print('Request data:');
-      print('Name: $name');
-      print('Gender: $gender');
-      print('Birth: $birthDateTime');
+      print('API URL: $baseUrl'); // API URL 로깅
+      print('Request data: ${jsonEncode({
+            'name': name,
+            'gender': gender,
+            'birthDateTime': birthDateTime.toIso8601String(),
+          })}');
 
       final response = await http.post(
         Uri.parse('$baseUrl/api/fortune'),
@@ -30,21 +32,27 @@ class ApiService {
       );
 
       print('Response status: ${response.statusCode}');
+      print('Response headers: ${response.headers}');
       print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
-        print('Response data: $data');
+        print('Parsed response data: $data');
         return Map<String, String>.from(data['fortune']);
-      } else if (response.statusCode == 429) {
-        return {'오류': '일일 사용량을 초과했습니다. 내일 다시 시도해주세요.'};
       } else {
-        print('Error response: ${utf8.decode(response.bodyBytes)}');
-        return {'오류': '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'};
+        print('Error status code: ${response.statusCode}');
+        print('Error response body: ${utf8.decode(response.bodyBytes)}');
+        if (response.statusCode == 429) {
+          return {'오류': '일일 사용량을 초과했습니다. 내일 다시 시도해주세요.'};
+        }
+        return {
+          '오류': '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요. (${response.statusCode})'
+        };
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('Network error: $e');
-      return {'오류': '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.'};
+      print('Stack trace: $stackTrace');
+      return {'오류': '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요. ($e)'};
     }
   }
 }
