@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "setup-flutter": "curl -L https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.9-stable.tar.xz | tar xJ && export PATH=\"$PATH:`pwd`/flutter/bin\"",
+    "build": "npm run setup-flutter && flutter build web --release --dart-define=API_URL=https://happy-year-2025-production.up.railway.app"
+  }
+} 
