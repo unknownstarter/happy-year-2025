@@ -36,8 +36,6 @@ def check_environment():
 
 check_environment()
 app = FastAPI()
-openai_service = OpenAIService()
-rate_limiter = RateLimiter()
 
 # CORS 미들웨어를 가장 먼저 추가
 app.add_middleware(
@@ -61,6 +59,14 @@ async def startup_event():
         logger.info("=====================")
     except Exception as e:
         logger.error(f"Startup error: {e}", exc_info=True)
+        raise
+
+    try:
+        logger.info("Initializing OpenAI service...")
+        openai_service = OpenAIService()
+        logger.info("OpenAI service initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize OpenAI service: {str(e)}", exc_info=True)
         raise
 
 @app.get("/")
