@@ -19,9 +19,9 @@ app.add_middleware(
         "http://localhost:3000",
         "http://localhost:8000",
         "https://happy-year-2025.vercel.app",
-        "https://happy-year-2025-git-*.vercel.app",
-        "https://happy-year-2025-*.vercel.app",
-        "https://happy-year-2025-9mq5-hzflfyfuo-noahs-projects-9b976b5c.vercel.app"
+        "https://happy-year-2025-9mq5-hzflfyfuo-noahs-projects-9b976b5c.vercel.app",
+        # Vercel의 preview 도메인도 허용
+        "https://*.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
