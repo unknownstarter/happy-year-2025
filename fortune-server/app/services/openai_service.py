@@ -9,7 +9,12 @@ class OpenAIService:
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             raise ValueError("OPENAI_API_KEY not found in environment variables")
-        self.client = AsyncOpenAI(api_key=api_key)
+            
+        try:
+            self.client = AsyncOpenAI(api_key=api_key)
+        except Exception as e:
+            print(f"Failed to initialize OpenAI client: {e}")
+            raise
         
     async def get_fortune(self, name: str, gender: str, birth_date_time: datetime) -> dict:
         system_prompt = """당신은 2025년 운세를 봐주는 점성술사입니다. 

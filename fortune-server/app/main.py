@@ -37,9 +37,8 @@ logger = logging.getLogger(__name__)
 @app.on_event("startup")
 async def startup_event():
     logger.info("=== Server Starting ===")
-    logger.info(f"REDIS_URL: {os.getenv('REDIS_URL', 'not set')}")
-    logger.info(f"PORT: {os.getenv('PORT', 'not set')}")
-    logger.info(f"CORS_ORIGINS: {os.getenv('CORS_ORIGINS', 'not set')}")
+    logger.info(f"OPENAI_API_KEY exists: {bool(os.getenv('OPENAI_API_KEY'))}")
+    logger.info(f"OPENAI_API_KEY length: {len(os.getenv('OPENAI_API_KEY', ''))}")
     logger.info("=====================")
 
 @app.get("/")
