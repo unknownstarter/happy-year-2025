@@ -34,6 +34,18 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+@app.on_event("startup")
+async def startup_event():
+    logger.info("=== Server Starting ===")
+    logger.info(f"REDIS_URL: {os.getenv('REDIS_URL', 'not set')}")
+    logger.info(f"PORT: {os.getenv('PORT', 'not set')}")
+    logger.info(f"CORS_ORIGINS: {os.getenv('CORS_ORIGINS', 'not set')}")
+    logger.info("=====================")
+
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "Server is running"}
+
 @app.post("/api/fortune")
 async def get_fortune(request: Request, fortune_request: FortuneRequest):
     client_ip = request.client.host
