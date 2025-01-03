@@ -42,7 +42,7 @@ openai_service = None  # 전역 변수 선언
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://happy-year-2025-9mq5-7yprbidbe-noahs-projects-9b976b5c.vercel.app",
+        "https://happy-year-2025-9mq5-bd6jlf3lf-noahs-projects-9b976b5c.vercel.app",
         "http://localhost:3000",
         "http://localhost:51171",
     ],
