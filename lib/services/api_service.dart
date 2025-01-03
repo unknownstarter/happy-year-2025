@@ -3,8 +3,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl = const String.fromEnvironment('API_URL',
-      defaultValue: 'http://localhost:8000' // 개발용 기본값
-      );
+      defaultValue: 'http://localhost:8000');
 
   static Future<Map<String, String>> getFortune({
     required String name,
@@ -12,15 +11,11 @@ class ApiService {
     required DateTime birthDateTime,
   }) async {
     try {
-      print('API URL: $baseUrl'); // API URL 로깅
-      print('Request data: ${jsonEncode({
-            'name': name,
-            'gender': gender,
-            'birthDateTime': birthDateTime.toIso8601String(),
-          })}');
+      final apiUrl = baseUrl.endsWith('/') ? baseUrl : '$baseUrl/';
+      print('API URL: $apiUrl');
 
       final response = await http.post(
-        Uri.parse('$baseUrl/api/fortune'),
+        Uri.parse('${apiUrl}api/fortune'),
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
         },
