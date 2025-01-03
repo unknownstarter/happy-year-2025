@@ -1,4 +1,4 @@
-from openai import AsyncOpenAI
+import openai
 from datetime import datetime
 import os
 from dotenv import load_dotenv
@@ -13,9 +13,7 @@ class OpenAIService:
         if not api_key:
             raise ValueError("OPENAI_API_KEY not found in environment variables")
             
-        self.client = AsyncOpenAI(
-            api_key=api_key
-        )
+        openai.api_key = api_key
         
     async def get_fortune(self, name: str, gender: str, birth_date_time: datetime) -> dict:
         system_prompt = """당신은 2025년 운세를 봐주는 점성술사입니다. 

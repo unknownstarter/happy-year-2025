@@ -36,6 +36,7 @@ def check_environment():
 
 check_environment()
 app = FastAPI()
+openai_service = None  # 전역 변수 선언
 
 # CORS 미들웨어를 가장 먼저 추가
 app.add_middleware(
@@ -49,6 +50,7 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     try:
+        global openai_service  # 전역 변수 사용
         logger.info("=== Server Starting ===")
         logger.info(f"Python version: {sys.version}")
         logger.info(f"Working directory: {os.getcwd()}")
