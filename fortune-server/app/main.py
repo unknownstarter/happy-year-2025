@@ -16,9 +16,12 @@ rate_limiter = RateLimiter()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://your-flutter-domain.com",  # 실제 도메인으로 수정 필요
-        "http://localhost:3000",  # 개발용
+        "http://localhost:3000",
+        "https://happy-year-2025.vercel.app",  # 실제 배포된 도메인
+        "https://happy-year-2025-git-main-your-github-username.vercel.app",
+        "https://happy-year-2025-*-your-github-username.vercel.app",
     ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
