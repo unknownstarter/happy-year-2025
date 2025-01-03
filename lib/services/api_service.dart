@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl =
-      String.fromEnvironment('API_URL', defaultValue: 'http://localhost:8000');
+  static const String baseUrl = String.fromEnvironment('API_URL',
+      defaultValue: 'https://happy-year-2025-production.up.railway.app');
 
   static Future<Map<String, String>> getFortune({
     required String name,
@@ -12,6 +12,7 @@ class ApiService {
   }) async {
     try {
       final apiUrl = baseUrl.endsWith('/') ? baseUrl : '$baseUrl/';
+      print('API URL: $apiUrl');
       print('Sending request to: ${apiUrl}api/fortune');
       print('Request body: ${jsonEncode({
             'name': name,
@@ -23,6 +24,7 @@ class ApiService {
         Uri.parse('${apiUrl}api/fortune'),
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json',
         },
         body: jsonEncode({
           'name': name,
