@@ -2,18 +2,26 @@ from openai import AsyncOpenAI
 from datetime import datetime
 import os
 from dotenv import load_dotenv
+import logging
+
+logger = logging.getLogger(__name__)
 
 class OpenAIService:
     def __init__(self):
-        load_dotenv()
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            raise ValueError("OPENAI_API_KEY not found in environment variables")
-            
         try:
+            load_dotenv()
+            api_key = os.getenv("OPENAI_API_KEY")
+            logger.info("Initializing OpenAI service")
+            
+            if not api_key:
+                logger.error("OPENAI_API_KEY not found in environment variables")
+                raise ValueError("OPENAI_API_KEY not found")
+                
             self.client = AsyncOpenAI(api_key=api_key)
+            logger.info("OpenAI client initialized successfully")
+            
         except Exception as e:
-            print(f"Failed to initialize OpenAI client: {e}")
+            logger.error(f"OpenAI service initialization failed: {e}", exc_info=True)
             raise
         
     async def get_fortune(self, name: str, gender: str, birth_date_time: datetime) -> dict:

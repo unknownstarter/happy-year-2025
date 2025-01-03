@@ -1,45 +1,67 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from .models import FortuneRequest, FortuneResponse
 from .services.openai_service import OpenAIService
 from .utils.rate_limiter import RateLimiter
 from dotenv import load_dotenv
 import os
 import logging
+import sys
+
+# 로깅 설정을 가장 먼저
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
+def check_environment():
+    logger.info("Checking environment...")
+    required_vars = ['OPENAI_API_KEY', 'REDIS_URL', 'PORT']
+    for var in required_vars:
+        value = os.getenv(var)
+        exists = bool(value)
+        logger.info(f"{var} exists: {exists}")
+        if exists:
+            logger.info(f"{var} length: {len(value)}")
+    
+    logger.info(f"Current working directory: {os.getcwd()}")
+    logger.info(f"Python path: {sys.path}")
+
+check_environment()
 app = FastAPI()
 openai_service = OpenAIService()
 rate_limiter = RateLimiter()
 
+# CORS 미들웨어를 가장 먼저 추가
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:8000",
-        "https://happy-year-2025.vercel.app",
-        "https://happy-year-2025-9mq5-2ku69kyls-noahs-projects-9b976b5c.vercel.app",
-        "https://happy-year-2025-*.vercel.app",
-    ],
+    allow_origins=["*"],  # 개발 중에는 모든 origin 허용
     allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["*"]
 )
-
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
 @app.on_event("startup")
 async def startup_event():
-    logger.info("=== Server Starting ===")
-    logger.info(f"OPENAI_API_KEY exists: {bool(os.getenv('OPENAI_API_KEY'))}")
-    logger.info(f"OPENAI_API_KEY length: {len(os.getenv('OPENAI_API_KEY', ''))}")
-    logger.info("=====================")
+    try:
+        logger.info("=== Server Starting ===")
+        logger.info(f"Python version: {sys.version}")
+        logger.info(f"Working directory: {os.getcwd()}")
+        logger.info(f"Directory contents: {os.listdir('.')}")
+        logger.info(f"OPENAI_API_KEY exists: {bool(os.getenv('OPENAI_API_KEY'))}")
+        logger.info(f"OPENAI_API_KEY length: {len(os.getenv('OPENAI_API_KEY', ''))}")
+        logger.info(f"REDIS_URL exists: {bool(os.getenv('REDIS_URL'))}")
+        logger.info("=====================")
+    except Exception as e:
+        logger.error(f"Startup error: {e}", exc_info=True)
+        raise
 
 @app.get("/")
 async def root():
@@ -62,3 +84,14 @@ async def get_fortune(request: Request, fortune_request: FortuneRequest):
     except Exception as e:
         logger.error(f"Error generating fortune: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e)) 
+
+@app.options("/api/fortune")
+async def options_fortune():
+    return JSONResponse(
+        content={"message": "OK"},
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Accept",
+        },
+    ) 
