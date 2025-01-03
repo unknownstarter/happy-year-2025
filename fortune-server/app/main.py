@@ -28,15 +28,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 @app.post("/api/fortune")
 async def get_fortune(request: Request, fortune_request: FortuneRequest):
     client_ip = request.client.host
-    logger.info(f"Request from IP: {client_ip}")
-    
-    await rate_limiter.check_rate_limit(request.client.host)
+    logger.info(f"Received request from IP: {client_ip}")
+    logger.info(f"Request data: {fortune_request}")
     
     try:
         fortune = await openai_service.get_fortune(
@@ -44,7 +46,8 @@ async def get_fortune(request: Request, fortune_request: FortuneRequest):
             fortune_request.gender,
             fortune_request.birthDateTime
         )
+        logger.info("Fortune generated successfully")
         return FortuneResponse(fortune=fortune)
     except Exception as e:
-        logger.error(f"Error: {str(e)}")
+        logger.error(f"Error generating fortune: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e)) 
