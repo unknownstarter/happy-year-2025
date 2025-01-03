@@ -14,7 +14,8 @@ class OpenAIService:
             raise ValueError("OPENAI_API_KEY not found in environment variables")
             
         self.client = AsyncOpenAI(
-            api_key=api_key
+            api_key=api_key,
+            base_url="https://api.openai.com/v1"
         )
         
     async def get_fortune(self, name: str, gender: str, birth_date_time: datetime) -> dict:
