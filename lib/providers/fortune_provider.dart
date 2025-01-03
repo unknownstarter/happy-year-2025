@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:happy_year_2025/models/chat_message_model.dart';
 import 'package:happy_year_2025/services/api_service.dart';
+import 'package:happy_year_2025/services/analytics_service.dart';
 
 class FortuneProvider with ChangeNotifier {
   String? _name;
@@ -77,22 +78,35 @@ class FortuneProvider with ChangeNotifier {
   }
 
   Future<void> analyzeFortune() async {
-    if (_name == null || _gender == null || _birthDateTime == null) return;
+    try {
+      // 운세 요청 이벤트 로깅
+      await AnalyticsService.logFortuneRequest(
+        name: name!,
+        gender: gender!,
+        birthDateTime: birthDateTime!,
+      );
 
-    addMessage('2025년 운세를 분석하고 있습니다...', false);
+      final fortune = await ApiService.getFortune(
+        name: name!,
+        gender: gender!,
+        birthDateTime: birthDateTime!,
+      );
 
-    final fortune = await ApiService.getFortune(
-      name: _name!,
-      gender: _gender!,
-      birthDateTime: _birthDateTime!,
-    );
+      // 운세 응답 이벤트 로깅
+      await AnalyticsService.logFortuneResponse(isSuccess: true);
 
-    setFortuneResult(fortune);
-
-    // 운세 결과 메시지 추가
-    fortune.forEach((key, value) {
-      addMessage('$key\n$value', false);
-    });
+      setFortuneResult(fortune);
+      fortune.forEach((key, value) {
+        addMessage('$key\n$value', false);
+      });
+    } catch (e) {
+      // 오류 이벤트 로깅
+      await AnalyticsService.logFortuneResponse(
+        isSuccess: false,
+        errorMessage: e.toString(),
+      );
+      addMessage('오류가 발생했습니다: $e', false);
+    }
   }
 
   FortuneProvider() {
