@@ -24,9 +24,9 @@ class ApiService {
         Uri.parse('${apiUrl}api/fortune'),
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Access-Control-Request-Method': 'POST',
-          'Access-Control-Request-Headers': 'content-type,accept'
+          'Accept': '*/*',
+          'Connection': 'keep-alive',
+          'Cache-Control': 'no-cache',
         },
         body: jsonEncode({
           'name': name,
