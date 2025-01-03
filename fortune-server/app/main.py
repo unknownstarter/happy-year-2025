@@ -41,7 +41,11 @@ openai_service = None  # 전역 변수 선언
 # CORS 미들웨어를 가장 먼저 추가
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 개발 중에는 모든 origin 허용
+    allow_origins=[
+        "https://happy-year-2025-9mq5-7yprbidbe-noahs-projects-9b976b5c.vercel.app",
+        "http://localhost:3000",
+        "http://localhost:51171",
+    ],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
