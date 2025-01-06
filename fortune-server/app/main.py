@@ -41,10 +41,7 @@ openai_service = None  # 전역 변수 선언
 # CORS 미들웨어를 가장 먼저 추가
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://happy-year-2025-9mq5-33xtbl6dh-noahs-projects-9b976b5c.vercel.app",
-        "https://happy-year-2025-*.vercel.app",
-    ],
+    allow_origins=["*"],  # 모든 도메인 허용
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Accept", "Origin"],
@@ -95,14 +92,3 @@ async def get_fortune(request: Request, fortune_request: FortuneRequest):
     except Exception as e:
         logger.error(f"Error generating fortune: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e)) 
-
-@app.options("/api/fortune")
-async def options_fortune():
-    return JSONResponse(
-        content={"message": "OK"},
-        headers={
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Accept",
-        },
-    ) 
