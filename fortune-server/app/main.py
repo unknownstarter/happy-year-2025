@@ -40,9 +40,12 @@ openai_service = None  # 전역 변수 선언
 
 # CORS 미들웨어를 가장 먼저 추가
 logger.info("Configuring CORS middleware...")
+cors_origins = os.getenv("CORS_ORIGINS", "https://happy-year-2025.vercel.app").split(",")
+logger.info(f"CORS origins: {cors_origins}")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 이 부분을 환경변수 값으로 변경해야 함
+    allow_origins=cors_origins,  # 환경변수에서 가져온 값 사용
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Accept", "Origin"],
