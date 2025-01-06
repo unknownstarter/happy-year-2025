@@ -42,7 +42,7 @@ openai_service = None  # 전역 변수 선언
 logger.info("Configuring CORS middleware...")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 모든 도메인 허용
+    allow_origins=["*"],  # 이 부분을 구체적인 도메인으로 변경
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Accept", "Origin"],
