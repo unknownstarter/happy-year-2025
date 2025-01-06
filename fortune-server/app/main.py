@@ -39,6 +39,7 @@ app = FastAPI()
 openai_service = None  # 전역 변수 선언
 
 # CORS 미들웨어를 가장 먼저 추가
+logger.info("Configuring CORS middleware...")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # 모든 도메인 허용
@@ -46,6 +47,7 @@ app.add_middleware(
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Accept", "Origin"],
 )
+logger.info("CORS middleware configured successfully")
 
 @app.on_event("startup")
 async def startup_event():
@@ -78,8 +80,10 @@ async def root():
 @app.post("/api/fortune")
 async def get_fortune(request: Request, fortune_request: FortuneRequest):
     client_ip = request.client.host
+    logger.info("Processing fortune request...")
     logger.info(f"Received request from IP: {client_ip}")
     logger.info(f"Request data: {fortune_request}")
+    logger.info(f"Request headers: {request.headers}")
     
     try:
         fortune = await openai_service.get_fortune(
