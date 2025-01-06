@@ -45,10 +45,12 @@ logger.info(f"CORS origins: {cors_origins}")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors_origins,  # 환경변수에서 가져온 값 사용
-    allow_credentials=True,
+    allow_origins=cors_origins,
+    allow_credentials=False,
     allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type", "Accept", "Origin"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=86400,
 )
 logger.info("CORS middleware configured successfully")
 
